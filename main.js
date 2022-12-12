@@ -167,7 +167,40 @@ while (balls.length < 1) {
   balls.push(ball);
 }
 
-const evilCircle = new EvilCircle(random(0, width), random(0, height));
+//const evilCircle = new EvilCircle(random(0, width), random(0, height));
+
+class Paddle {
+    constructor(x, y, width, height, velY, color) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.velY = velY;
+        this.color = color;
+        window.addEventListener("keydown", (e) => {
+            switch (e.key) {
+              case "i":
+                this.y -= this.velY;
+                break;
+              case "l":
+                this.y += this.velY;
+                break;
+            }
+        });
+    }
+
+    // draw a rectangluar paddle on the canvas on the right side of the div
+    draw() {
+        ctx.beginPath();
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+
+const paddle = new Paddle(0, 0, 10, 100, 0, "white");
+
+
+
 
 let count = 0;
 
@@ -190,9 +223,10 @@ function loop() {
     }
     para.textContent = `Ball count: ${count}`;
     if (count > 0) {
-        evilCircle.draw();
+        paddle.draw();
+       /*  evilCircle.draw();
         evilCircle.checkBounds();
-        evilCircle.collisionDetect();
+        evilCircle.collisionDetect(); */
     }
   
     requestAnimationFrame(loop);
