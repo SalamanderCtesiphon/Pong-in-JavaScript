@@ -11,9 +11,9 @@ const para = document.querySelector('p');
 function random(min, max) {
   const num = Math.floor(Math.random() * (max - min + 1)) + min;
   if (num < 0) {
-    return -7;
+    return -10;
   } else if (num > 0) {
-    return 7;
+    return 10;
   }
 }
 
@@ -116,7 +116,7 @@ class Paddle {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.velY = 40;
+        this.velY = 50;
         this.color = color;
         window.addEventListener("keydown", (e) => {
             switch (e.key) {
@@ -160,7 +160,62 @@ class Paddle {
       }
 }
 
-const paddle = new Paddle(1700, 300, 15, 160, 0, "white");
+const paddle = new Paddle(1720, 300, 15, 160, 0, "white");
+
+class CpuPaddle {
+    constructor(x, y, width, height, velY, color) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.velY = 20;
+        this.color = color;
+    }
+
+    // draw a rectangluar paddle on the canvas on the right side of the div
+    draw() {
+        ctx.beginPath();
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    checkBounds() {
+        if ((this.y + this.height / 2 ) >= height) {
+            this.y = height - this.height;
+        }
+
+        if ((this.y) <= 0) {
+            this.y = this.height - 160;
+        }
+    }
+
+    collisionDetect() {
+        // check if the ball is in the same position as the paddle
+        for (const ball of balls) {
+            if (ball.exists) {
+                if (ball.x - ball.size <= this.x + this.width) {
+                    if (ball.y >= this.y && ball.y <= this.y + this.height) {
+                        ball.velX = -(ball.velX);
+                    }
+                }
+            }
+        }
+    }
+
+    controlAI() {
+        for (const ball of balls) {
+            if (ball.exists) {
+                if (ball.y > this.y + this.height / 2) {
+                    this.y += this.velY;
+                } else if (ball.y < this.y + this.height / 2) {
+                    this.y -= this.velY;
+                }
+            }
+        }
+    }
+}
+
+const cpuPaddle = new CpuPaddle(10, 300, 15, 160, 0, "white");
 
 
 
@@ -189,6 +244,11 @@ function loop() {
         paddle.draw();
         paddle.checkBounds();
         paddle.collisionDetect();
+        cpuPaddle.draw();
+        cpuPaddle.checkBounds();
+        cpuPaddle.collisionDetect();
+        cpuPaddle.controlAI();
+
     }
   
     requestAnimationFrame(loop);
