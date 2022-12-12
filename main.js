@@ -168,7 +168,7 @@ class CpuPaddle {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.velY = 20;
+        this.velY = 7;
         this.color = color;
     }
 
@@ -205,7 +205,7 @@ class CpuPaddle {
     controlAI() {
         for (const ball of balls) {
             if (ball.exists) {
-                if (ball.y > this.y + this.height / 2) {
+                if (ball.y > this.y + this.height / 2 && ball.x < 600) {
                     this.y += this.velY;
                 } else if (ball.y < this.y + this.height / 2) {
                     this.y -= this.velY;
