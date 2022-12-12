@@ -10,7 +10,11 @@ const para = document.querySelector('p');
 // function to generate random number
 function random(min, max) {
   const num = Math.floor(Math.random() * (max - min + 1)) + min;
-  return num;
+  if (num < 0) {
+    return -7;
+  } else if (num > 0) {
+    return 7;
+  }
 }
 
 // function to generate random color
@@ -150,15 +154,13 @@ class Ball extends Shape {
 const balls = [];
 
 while (balls.length < 1) {
-  const size = random(10, 20);
+  const size = 15;
   const ball = new Ball(
-    // ball position always drawn at least one ball width
-    // away from the edge of the canvas, to avoid drawing errors
     random(0 + size, width - size),
     random(0 + size, height - size),
     random(-7, 7),
     random(-7, 7),
-    randomRGB(),
+    "white",
     size
   );
 
