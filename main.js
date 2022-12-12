@@ -147,16 +147,15 @@ class Paddle {
         }
     }
     collisionDetect() {
+        // check if the ball is in the same position as the paddle
         for (const ball of balls) {
-          if (ball.exists) {
-            const dx = this.x - ball.x;
-            const dy = this.y - ball.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-      
-            if (distance < this.size + ball.size) {
-              ball.exists = false;
+            if (ball.exists) {
+                if (ball.x + ball.size >= this.x) {
+                    if (ball.y >= this.y && ball.y <= this.y + this.height) {
+                        ball.velX = -(ball.velX);
+                    }
+                }
             }
-          }
         }
       }
 }
