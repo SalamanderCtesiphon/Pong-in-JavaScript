@@ -90,6 +90,10 @@ class EvilCircle extends Shape {
 }
 
 class Ball extends Shape {
+
+    x = (width / 2)
+    y = (height / 2)
+
     constructor(x, y, velX, velY, color, size) {
         super(x, y, velX, velY);    
         this.color = color;
@@ -145,7 +149,7 @@ class Ball extends Shape {
 
 const balls = [];
 
-while (balls.length < 25) {
+while (balls.length < 1) {
   const size = random(10, 20);
   const ball = new Ball(
     // ball position always drawn at least one ball width
