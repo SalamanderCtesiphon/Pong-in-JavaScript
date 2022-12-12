@@ -32,66 +32,7 @@ class Shape {
     }
 }
 
-class EvilCircle extends Shape {
-    constructor(x, y) {
-        super(x, y, 20, 20);
-        this.color = "white";
-        this.size = 30;
-        window.addEventListener("keydown", (e) => {
-            switch (e.key) {
-              case "a":
-                this.x -= this.velX;
-                break;
-              case "d":
-                this.x += this.velX;
-                break;
-              case "w":
-                this.y -= this.velY;
-                break;
-              case "s":
-                this.y += this.velY;
-                break;
-            }
-        });
-    }
-    draw() {
-        ctx.beginPath();
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = this.color;
-        ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-        ctx.stroke();
-    }         
-    checkBounds() {
-        if ((this.x + this.size) >= width) {
-            this.x = width - this.size;
-        }
 
-        if ((this.x - this.size) <= 0) {
-            this.x = this.size;
-        }
-
-        if ((this.y + this.size) >= height) {
-            this.y = height - this.size;
-        }
-
-        if ((this.y - this.size) <= 0) {
-            this.y = this.size;
-        }
-    }
-    collisionDetect() {
-        for (const ball of balls) {
-          if (ball.exists) {
-            const dx = this.x - ball.x;
-            const dy = this.y - ball.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-      
-            if (distance < this.size + ball.size) {
-              ball.exists = false;
-            }
-          }
-        }
-      }
-}
 
 class Ball extends Shape {
 
@@ -167,7 +108,7 @@ while (balls.length < 1) {
   balls.push(ball);
 }
 
-//const evilCircle = new EvilCircle(random(0, width), random(0, height));
+
 
 class Paddle {
     constructor(x, y, width, height, velY, color) {
@@ -175,14 +116,14 @@ class Paddle {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.velY = velY;
+        this.velY = 40;
         this.color = color;
         window.addEventListener("keydown", (e) => {
             switch (e.key) {
-              case "i":
+              case "k":
                 this.y -= this.velY;
                 break;
-              case "l":
+              case "j":
                 this.y += this.velY;
                 break;
             }
@@ -195,9 +136,32 @@ class Paddle {
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
+
+    checkBounds() {
+        if ((this.y + this.height) >= height) {
+            this.y = height - this.height;
+        }
+
+        if ((this.y) <= 0) {
+            this.y = this.height - 160;
+        }
+    }
+    collisionDetect() {
+        for (const ball of balls) {
+          if (ball.exists) {
+            const dx = this.x - ball.x;
+            const dy = this.y - ball.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+      
+            if (distance < this.size + ball.size) {
+              ball.exists = false;
+            }
+          }
+        }
+      }
 }
 
-const paddle = new Paddle(0, 0, 10, 100, 0, "white");
+const paddle = new Paddle(1700, 300, 15, 160, 0, "white");
 
 
 
@@ -224,9 +188,8 @@ function loop() {
     para.textContent = `Ball count: ${count}`;
     if (count > 0) {
         paddle.draw();
-       /*  evilCircle.draw();
-        evilCircle.checkBounds();
-        evilCircle.collisionDetect(); */
+        paddle.checkBounds();
+        paddle.collisionDetect();
     }
   
     requestAnimationFrame(loop);
